@@ -36,30 +36,36 @@ async function main() {
 
     app.post('/bank-account',
       authenticateJWT,
-       async (req,res)=>{
-      await bankAccountController.create(req, res)
-    })
+      async (req, res) => {
+        await bankAccountController.create(req, res)
+      })
 
-    app.post('/deposit', 
+    app.get('/bank-account/:accountId',
+      authenticateJWT,
+      async (req, res) => {
+        await bankAccountController.fetchAccount(req, res)
+      })
+
+    app.post('/deposit',
       authenticateJWT,
       checkPermission('deposit:customer_account'),
       async (req, res) => {
-        await transactionController.deposit(req,res)
-    })
+        await transactionController.deposit(req, res)
+      })
 
-    app.post('/withdraw', 
+    app.post('/withdraw',
       authenticateJWT,
       checkPermission('withdraw:customer_account'),
       async (req, res) => {
-        await transactionController.withdrawal(req,res)
-    })
+        await transactionController.withdrawal(req, res)
+      })
 
-    app.post('/transfer', 
+    app.post('/transfer',
       authenticateJWT,
       checkPermission('transfer:customer_account'),
       async (req, res) => {
-        await transactionController.transfer(req,res)
-    })
+        await transactionController.transfer(req, res)
+      })
 
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);

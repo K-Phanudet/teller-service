@@ -5,10 +5,11 @@ import { WithdrawalUseCase } from "../usecase/withdraw.usecase.js";
 import { plainToClass } from "class-transformer";
 import { Service } from "typedi";
 import { validate } from "class-validator";
-import { Response , Request } from "express";
+import { Response, Request } from "express";
 import { WithdrawalInputDto } from "../dtos/withdrawal.dto.js";
 import { TransferInputDto } from "../dtos/transfer.dto.js";
 import { InsufficientBalanceError } from "../core/error/insufficient-balance.error.js";
+import { ResourceNotFoundError } from "../core/error/resource-not-found.error.js";
 
 @Service()
 export class TransactionController {
@@ -42,6 +43,7 @@ export class TransactionController {
         }
 
         try {
+
             await this.depositUseCase.execute(inputDto.accountId, inputDto.amount);
 
             res.status(200).json({
@@ -50,7 +52,9 @@ export class TransactionController {
                 amount: inputDto.amount,
             });
         } catch (error) {
-            if (error instanceof Error) {
+            if (error instanceof ResourceNotFoundError) {
+                return res.status(400).json({ message: error.message });
+            } else if (error instanceof Error) {
                 return res.status(500).send({ message: error.message })
             } else {
                 res.status(500).json({
@@ -61,7 +65,7 @@ export class TransactionController {
         }
     }
 
-    async withdrawal(req: Request, res: Response){
+    async withdrawal(req: Request, res: Response) {
         const inputDto = plainToClass(WithdrawalInputDto, req.body);
 
         const errors = await validate(inputDto);
@@ -85,9 +89,12 @@ export class TransactionController {
                 amount: inputDto.amount,
             });
         } catch (error) {
-            if(error instanceof InsufficientBalanceError){
+            if (error instanceof InsufficientBalanceError) {
                 return res.status(403).send({ message: error.message })
-            }else if (error instanceof Error) {
+            } else if (error instanceof ResourceNotFoundError) {
+                return res.status(400).json({ message: error.message });
+            }
+            else if (error instanceof Error) {
                 return res.status(500).send({ message: error.message })
             } else {
                 res.status(500).json({
@@ -98,7 +105,7 @@ export class TransactionController {
         }
     }
 
-    async transfer(req: Request, res: Response){
+    async transfer(req: Request, res: Response) {
         const inputDto = plainToClass(TransferInputDto, req.body);
 
         const errors = await validate(inputDto);
@@ -120,11 +127,14 @@ export class TransactionController {
                 message: 'Transfer successful',
                 fromAccount: inputDto.fromAccountId,
                 toAccount: inputDto.toAccountId,
+                amount: inputDto.amount
             });
         } catch (error) {
-            if(error instanceof InsufficientBalanceError){
+            if (error instanceof InsufficientBalanceError) {
                 return res.status(403).send({ message: error.message })
-            }else if (error instanceof Error) {
+            } else if (error instanceof ResourceNotFoundError) {
+                return res.status(400).json({ message: error.message });
+            } else if (error instanceof Error) {
                 return res.status(500).send({ message: error.message })
             } else {
                 res.status(500).json({
