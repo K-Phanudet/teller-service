@@ -1,0 +1,51 @@
+# Node.js
+node_modules/
+package-lock.json
+yarn-error.log
+yarn.lock
+
+# TypeScript
+dist/
+build/
+*.js.map
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# OS generated files
+[Tt]rash/
+*.bak
+
+# Coverage Reports
+coverage/
+*.lcov
+
+# Docker
+docker-compose.override.yml
+*.dockerignore
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Other
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+.pnp*
+.pnp.cjs

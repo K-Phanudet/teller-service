@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "target": "ESNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "strict": true,
+    "experimentalDecorators": true, /* Enable experimental support for legacy experimental decorators. */
+    "emitDecoratorMetadata": true, /* Emit design-type metadata for decorated declarations in source files. */
+    "rootDir": "./src", /* Specify the root folder within your source files. */
+    "baseUrl": "./src", /* Specify the base directory to resolve non-relative module names. */
+    "allowJs": true, // Allow JavaScript files if necessary
+    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
+    "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    "outDir": "./dist",
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo",
+    "paths": {
+      "@usecase/*": ["usecase/*"],
+      "@domain/*": ["domain/*"],
+      "@infrastructure/*": ["infrastructure/*"],
+      "@common/*": ["common/*"],
+    },
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
